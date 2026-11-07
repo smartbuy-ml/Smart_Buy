@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Smart Buy | Purchase Prediction</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #F3E8FF;
+            color: #3B245E;
+            margin: 0;
+            padding: 25px;
+        }
+
+        .container {
+            max-width: 500px;
+            margin: 30px auto;
+            padding: 25px;
+            background: white;
+            border-radius: 12px;
+        }
+
+        h2 {
+            text-align: center;
+            color: #7C3AED;
+        }
+
+        label {
+            display: block;
+            margin-top: 14px;
+            font-weight: bold;
+        }
+
+        input, select {
+            width: 100%;
+            box-sizing: border-box;
+            padding: 10px;
+            margin-top: 6px;
+            border: 1px solid #D8B4FE;
+            border-radius: 6px;
+        }
+
+        button {
+            width: 50%;
+            margin-top: 22px;
+            padding: 12px;
+            background: #7C3AED;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            justify-content: center;
+            align-items: center;
+            margin-left: 115px;
+        }
+
+       
+
+        .result {
+            margin-top: 20px;
+            padding: 15px;
+            background: #F0FDF4;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .result-card {
+            text-align: center;
+        }
+
+        .error {
+            margin-top: 15px;
+            color: #B91C1C;
+            text-align: center;
+        }
+
+        .back-link {
+            display: block;
+            margin-top: 18px;
+            text-align: center;
+            color: #7C3AED;
+            text-decoration: none;
+        }
+        
+        
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <h2>Customer Purchase Prediction</h2>
+
+    <p>Enter customer details to predict purchase behaviour.</p>
+
+    <form method="POST" action="{{ url_for('prediction') }}">
+
+    <label>Age</label>
+    <input type="number" 
+            name="age"
+            min="1"
+            max="120"
+           value="{{ request.form.get('age', '') }}" required>
+
+           
+
+    <label>Gender</label>
+    <select name="gender" required>
+        <option value="">Select Gender</option>
+        <option value="Male">Male</option>
+        <option value="Female">Female</option>
+    </select>
+
+    
+    <label for="category">Purchase Category</label>
+
+<select name="category" id="category" required>
+    <option value="">Select Category</option>
+    <option value="Kitchen">Kitchen</option>
+    <option value="Electronics">Electronics</option>
+    <option value="Sports">Sports</option>
+    <option value="Clothes">Clothes</option>
+    <option value="Stationery">Stationery</option>
+    <option value="Accessories">Accessories</option>
+    <option value="Furniture">Furniture</option>
+    <option value="Beauty Products">Beauty Products</option>
+    <option value="Footwear">Footwear</option>
+    <option value="Jewellery">Jewellery</option>
+    <option value="Home Decor">Home Decor</option>
+    <option value="Books">Books</option>
+    <option value="Groceries">Groceries</option>
+
+    
+    {% for category in categories %}
+        <option value="{{ category }}"
+            {% if request.form.get('category') == category %}selected{% endif %}>
+            {{ category }}
+        </option>
+    {% endfor %}
+</select>
+
+    <label>previous purchase count</label>
+    <input type="number" name="previous_purchase"
+       value="{{ request.form.get('previous_purchase', '') }}"
+       required>
+
+    <label>website visited time(min)</label>
+    <input type="number" name="website_visited_time"
+       value="{{ request.form.get('website_visited_time', '') }}"
+       required>   
+    
+
+    <button type="submit">Predict Purchase</button>
+    
+
+</form>
+
+    {% if prediction is defined and prediction is not none %}
+    <div class="result-card">
+
+        <h3>Prediction Result</h3>
+
+        <p>
+            <strong>Prediction:</strong>
+            {% if prediction|string|lower in ['yes', 'purchase'] %}
+                Purchase
+            {% else %}
+                Not Purchase
+            {% endif %}
+        </p>
+
+        <p>
+            <strong>Probability:</strong>
+            {{ "%.2f"|format(prediction_percentage) }}%
+        </p>
+
+    </div>
+    {% endif %}
+
+    {% if error %}
+    <div class="error-message">
+        {{ error }}
+    </div>
+    {% endif %}
+
+    <a href="{{ url_for('owner_dashboard') }}" class="back-link">
+        Back to Dashboard
+    </a>
+
+</div>
+
+</body>
+
+</html>

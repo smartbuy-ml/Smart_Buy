@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Reset Password | Smart Buy</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #F3E8FF;
+            color: #3B245E;
+            text-align: center;
+            padding: 40px 15px;
+        }
+
+        .forgot-card {
+            background: white;
+            max-width: 350px;
+            margin: auto;
+            padding: 25px;
+            border-radius: 12px;
+        }
+
+        input, button {
+            width: 100%;
+            box-sizing: border-box;
+            padding: 12px;
+            margin: 10px 0;
+        }
+
+        button {
+            background: #7C3AED;
+            color: white;
+            border: none;
+            border-radius: 6px;
+        }
+
+        a { color: #7C3AED; }
+        .error { color: red; }
+        .message { color: green; }
+    </style>
+</head>
+
+<body>
+    <div class="forgot-card">
+        <h2>Reset Password</h2>
+        <p>Enter your registered email and new password.</p>
+
+        {% if error %}
+            <p class="error">{{ error }}</p>
+        {% endif %}
+
+        {% if message %}
+            <p class="message">{{ message }}</p>
+        {% endif %}
+
+        <form method="POST">
+            <input type="email" name="email"
+                   placeholder="Registered email" required>
+
+            <input type="password" name="new_password"
+                   placeholder="New password (minimum 8 characters)"
+                   minlength="8" required>
+
+            <button type="submit">Reset Password</button>
+        </form>
+
+        <a href="{{ url_for('owner_login') }}">Back to Owner Login</a>
+    </div>
+</body>
+</html>

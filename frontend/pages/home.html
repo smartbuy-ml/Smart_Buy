@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Smart Buy | Customer Purchase Prediction</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #F3E8FF, #FFF0E0);
+            color: #3B245E;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 7%;
+            background: white;
+            box-shadow: 0 3px 12px rgba(0, 0, 0, 0.08);
+        }
+
+        .logo {
+            font-size: 27px;
+            font-weight: bold;
+            color: #7C3AED;
+        }
+
+        .logo span {
+            color: #F97316;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            padding: 10px 17px;
+            border-radius: 8px;
+            font-weight: bold;
+            color: #6D28D9;
+            border: 1px solid #7C3AED;
+            transition: 0.3s;
+        }
+
+        .nav-links a:hover {
+            background: #7C3AED;
+            color: white;
+        }
+
+        .hero {
+            max-width: 1100px;
+            margin: auto;
+            padding: 90px 25px 65px;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: 45px;
+            line-height: 1.3;
+            margin-bottom: 20px;
+        }
+
+        .hero h1 span {
+            color: #7C3AED;
+        }
+
+        .hero p {
+            max-width: 700px;
+            margin: 0 auto 30px;
+            font-size: 18px;
+            line-height: 1.8;
+            color: #5B4777;
+        }
+
+        .main-btn {
+            display: inline-block;
+            text-decoration: none;
+            padding: 14px 28px;
+            margin: 8px;
+            border-radius: 9px;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            background: linear-gradient(135deg, #7C3AED, #F97316);
+            transition: 0.3s;
+        }
+
+        .main-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 7px 18px rgba(124, 58, 237, 0.25);
+        }
+
+        .features {
+            display: flex;
+            justify-content: center;
+            gap: 22px;
+            flex-wrap: wrap;
+            padding: 15px 7% 65px;
+        }
+
+        .feature-card {
+            width: 290px;
+            padding: 28px 22px;
+            text-align: center;
+            background: white;
+            border-radius: 15px;
+            border-bottom: 5px solid #7C3AED;
+            box-shadow: 0 5px 18px rgba(80, 40, 120, 0.10);
+        }
+
+        .feature-card:nth-child(2) {
+            border-bottom-color: #F97316;
+        }
+
+        .feature-card:nth-child(3) {
+            border-bottom-color: #A855F7;
+        }
+
+        .feature-card .emoji {
+            font-size: 38px;
+            margin-bottom: 15px;
+        }
+
+        .feature-card h3 {
+            color: #6D28D9;
+            margin-bottom: 12px;
+        }
+
+        .feature-card p {
+            color: #6B5A7D;
+            line-height: 1.6;
+        }
+
+        footer {
+            padding: 20px;
+            text-align: center;
+            color: #6B5A7D;
+            background: rgba(255, 255, 255, 0.7);
+        }
+
+        @media (max-width: 600px) {
+            nav {
+                flex-direction: column;
+                gap: 18px;
+            }
+
+            .nav-links {
+                justify-content: center;
+            }
+
+            .hero {
+                padding-top: 55px;
+            }
+
+            .hero h1 {
+                font-size: 32px;
+            }
+
+            .hero p {
+                font-size: 16px;
+            }
+        }
+            #rolePopup {
+                position: fixed;
+                inset: 0;
+                background: rgba(0, 0, 0, 0.5);
+                align-items: center;
+                justify-content: center;
+                z-index: 9999;
+                
+            }
+
+            .popup-box {
+                background: white;
+                padding: 30px;
+                border-radius: 15px;
+                text-align: center;
+                display: flex;
+                flex-direction: column;
+                gap: 15px;
+                width: 280px;
+            }
+    </style>
+</head>
+
+<body>
+    
+
+    <nav>
+        <div class="logo">🛍️ Smart<span>Buy</span></div>
+    </nav>
+
+    <section class="hero">
+        <h1>
+            Understand Customer Behavior.<br>
+            <span>Predict Purchase Decisions.</span>
+        </h1>
+
+        <p>
+            Smart Buy is a customer purchase prediction system that helps
+            shopping businesses analyze customer data and predict possible
+            future purchases using Machine Learning.
+        </p>
+
+        <button class="main-btn" onclick="openRolePopup()">
+            Get Started
+        </button>
+
+        <div id="rolePopup" style="display:none;">
+            <div class="popup-box">
+                <h2>Choose Your Role</h2>
+
+        <a href="{{ url_for('admin_register') }}" class="main-btn">
+            Admin
+        </a>
+
+        <a href="{{ url_for('owner_register') }}" class="main-btn">
+            Owner
+        </a>
+        
+
+        
+        <button onclick="closeRolePopup()">Cancel</button>
+    </div>
+</div>
+
+        
+    </section>
+
+    <section class="features">
+
+        <div class="feature-card">
+            <div class="emoji">📁</div>
+            <h3>Upload Customer Data</h3>
+            <p>
+                Upload customer information using a CSV dataset
+                to begin analyzing shopping patterns.
+            </p>
+        </div>
+
+        <div class="feature-card">
+            <div class="emoji">🤖</div>
+            <h3>Machine Learning</h3>
+            <p>
+                Use a Decision Tree model to learn from available
+                customer purchase data and make predictions.
+            </p>
+        </div>
+
+        <div class="feature-card">
+            <div class="emoji">📊</div>
+            <h3>Purchase Insights</h3>
+            <p>
+            Analyze customer behavior and predict whether 
+            they will buy a product using Machine Learning.
+            </p>
+        </div>
+        
+
+    </section>
+
+    <footer>
+        <p>© 2026 Smart Buy | Customer Purchase Prediction System</p>
+    </footer>
+<script>
+function openRolePopup() {
+    document.getElementById("rolePopup").style.display = "flex";
+}
+
+function closeRolePopup() {
+    document.getElementById("rolePopup").style.display = "none";
+}
+</script>
+</body>
+</html>

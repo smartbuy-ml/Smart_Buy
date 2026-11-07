@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Buy | Admin Registration</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #7c3aed, #f97316);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .register-container {
+            background: white;
+            width: 100%;
+            max-width: 400px;
+            padding: 25px;
+            border-radius: 18px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        .logo {
+            text-align: center;
+            margin-bottom: 28px;
+        }
+
+        .logo-icon {
+            width: 55px;
+            height: 55px;
+            background: #7c3aed;
+            color: white;
+            border-radius: 14px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 27px;
+            margin: 0 auto 12px;
+        }
+
+        h1 {
+            color: #7c3aed;
+            font-size: 28px;
+        }
+
+        .subtitle {
+            color: #777;
+            font-size: 14px;
+            margin-top: 6px;
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #3b245e;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            outline: none;
+            font-size: 14px;
+        }
+
+        input:focus {
+            border-color: #7c3aed;
+            box-shadow: 0 0 4px #c4b5fd;
+        }
+
+        button {
+            width: 100%;
+            padding: 13px;
+            border: none;
+            border-radius: 8px;
+            background: #7c3aed;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        button:hover {
+            background: #f97316;
+        }
+
+        .login-link {
+            text-align: center;
+            margin-top: 22px;
+            font-size: 14px;
+            color: #666;
+        }
+
+        .login-link a {
+            color: #7c3aed;
+            font-weight: bold;
+            text-decoration: none;
+        }
+
+        .message {
+            color: #dc2626;
+            background: #fef2f2;
+            padding: 10px;
+            border-radius: 7px;
+            margin-bottom: 15px;
+            font-size: 14px;
+            text-align: center;
+        }
+
+        .back-link {
+            
+            text-decoration: none;
+            text-align: center;
+            padding-bottom: 15px;
+            display: block;
+            width: fit-content;
+            margin: 20px auto;
+        }
+
+        
+    </style>
+</head>
+
+<body>
+
+    <div class="register-container">
+
+        <div class="logo">
+            <div class="logo-icon">🛡️</div>
+            <h1>Smart Buy</h1>
+            <p class="subtitle">Admin Registration</p>
+        </div>
+
+        {% if error %}
+        <div class="message">{{ error }}</div>
+        {% endif %}
+
+        <form action="/admin-register" method="POST">
+
+            <div class="form-group">
+                <label for="admin_name">Admin Name</label>
+                <input
+                    type="text"
+                    id="admin_name"
+                    name="admin_name"
+                    placeholder="Enter admin name"
+                    required>
+            </div>
+
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    placeholder="Enter admin email"
+                    required>
+            </div>
+
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input
+                    type="password"
+                    id="password"
+                    name="password"
+                    placeholder="Enter password"
+                    minlength="8"
+                    required>
+            </div>
+
+            <button type="submit">Register Admin</button>
+
+        </form>
+
+        <div class="login-link">
+            Already registered?
+            <a href="/admin-performance">Admin Login</a>
+        </div>
+        
+        
+     <a class="back-link" href="/admin-dashboard">Back to Dashboard</a>
+
+    </div>
+
+</body>
+</html>

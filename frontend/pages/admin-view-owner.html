@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Owner Dataset | Smart Buy</title>
+
+    <style>
+        body {
+            margin: 0;
+            padding: 12px;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #F3E8FF, #FFF0E0);
+            color: #3B245E;
+        }
+
+        h1 {
+            color: #6D28D9;
+        }
+
+        .table-container {
+            width: 100%;
+            overflow-x: auto;
+            background: white;
+            padding: 10px;
+            box-sizing: border-box;
+            border-radius: 12px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            white-space: nowrap;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #E9D5FF;
+        }
+
+        th {
+            background: #7C3AED;
+            color: white;
+        }
+
+        .back {
+            display: inline-block;
+            margin-bottom: 15px;
+            background: #7C3AED;
+            color: white;
+            padding: 10px 16px;
+            border-radius: 8px;
+            text-decoration: none;
+        }
+    </style>
+</head>
+
+<body>
+    <nav>
+    <h2>🛍️ Smart Buy Admin</h2>
+    </nav>
+
+    <a class="back" href="/admin-performance">
+        Back to Owner Performance
+    </a>
+
+    <h1>Owner Customer Dataset</h1>
+    <p>Owner Email: {{ owner_email }}</p>
+    <p>Total Records: {{ rows|length }}</p>
+
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    {% for column in columns %}
+                    <th>{{ column }}</th>
+                    {% endfor %}
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for row in rows %}
+                <tr>
+                    {% for column in columns %}
+                    <td>{{ row.get(column, "") }}</td>
+                    {% endfor %}
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="{{ columns|length if columns else 1 }}">
+                        No customer records found.
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+            <a href="{{ url_for('admin_logout') }}">Logout</a>
+        </table>
+    </div>
+
+</body>
+</html>

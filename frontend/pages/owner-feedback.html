@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Buy - Owner Feedback</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            padding: 25px;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #F3E8FF, #FFF0E0);
+            color: #3B245E;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: auto;
+        }
+
+        h1, h2 {
+            text-align: center;
+            color: #7C3AED;
+        }
+
+        .card {
+            background: white;
+            padding: 25px;
+            margin: 20px 0;
+            border-radius: 15px;
+            box-shadow: 0 4px 12px #00000015;
+        }
+
+        label {
+            display: block;
+            margin: 15px 0 8px;
+            font-weight: bold;
+        }
+
+        select, textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #C4B5FD;
+            border-radius: 8px;
+            font-size: 15px;
+        }
+
+        button, .back-btn {
+            display: inline-block;
+            margin-top: 15px;
+            padding: 12px 20px;
+            background: #7C3AED;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        button:hover, .back-btn:hover {
+            background: #F97316;
+        }
+
+        .feedback-item {
+            background: #FFF7ED;
+            border-left: 5px solid #F97316;
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 15px;
+            overflow-wrap: anywhere;
+        }
+
+        .feedback-item p {
+            white-space: pre-wrap;
+        }
+
+        .message {
+            text-align: center;
+            color: #15803D;
+        }
+
+        .error {
+            text-align: center;
+            color: #B91C1C;
+        }
+        .back-btn {
+            display: inline-block;
+            margin-bottom: 15px;
+            background: #F97316;
+            color: white;
+            padding: 10px 16px;
+            border-radius: 8px;
+            position: absolute;
+            top: 20px;
+            right: 20px;
+        }
+            
+        
+    </style>
+</head>
+
+<body>
+    <div class="container">
+
+        <h1>🛍️ Smart Buy</h1>
+        <h2>Owner Feedback</h2>
+
+        <div class="card">
+            <h2>Share Your Feedback</h2>
+
+            {% if success %}
+                <p class="message">{{ success }}</p>
+            {% endif %}
+
+            {% if error %}
+                <p class="error">{{ error }}</p>
+            {% endif %}
+
+            <form action="{{ url_for('owner_feedback') }}" method="POST">
+
+                <label for="rating">Select Rating</label>
+                <select name="rating" id="rating" required>
+                    <option value="">Choose your rating</option>
+                    <option value="5">5 - Excellent</option>
+                    <option value="4">4 - Very Good</option>
+                    <option value="3">3 - Good</option>
+                    <option value="2">2 - Fair</option>
+                    <option value="1">1 - Poor</option>
+                </select>
+
+                <label for="feedback">Write Your Feedback</label>
+                <textarea
+                    name="feedback"
+                    id="feedback"
+                    rows="5"
+                    maxlength="1000"
+                    placeholder="Share your experience with Smart Buy..."
+                    required></textarea>
+
+                <button type="submit">Submit Feedback</button>
+                
+                
+                <a href="{{ url_for('owner_dashboard') }}" class="back-btn">
+                    Back to Dashboard
+                </a>
+
+            </form>
+        </div>
+
+        <div class="card">
+            <h2>Feedback from All Owners</h2>
+
+            {% if feedbacks %}
+                {% for item in feedbacks %}
+                    <div class="feedback-item">
+                        <strong>{{ item.owner_name }}</strong>
+
+                        <p>Company: {{ item.company }}</p>
+                        <p>Rating: {{ item.rating }}/5</p>
+                        <p>{{ item.feedback }}</p>
+                        <small>{{ item.date }}</small>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <p>No feedback submitted yet.</p>
+            {% endif %}
+        </div>
+
+        
+    </div>
+</body>
+</html>

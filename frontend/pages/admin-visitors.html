@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Smart Buy | Website Visitors</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #F3E8FF, #FFF0E0);
+            color: #3B245E;
+        }
+
+        nav {
+            background: linear-gradient(90deg, #7C3AED, #F97316);
+            padding: 18px;
+            text-align: center;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            margin: 8px;
+            display: inline-block;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1100px;
+            margin: 30px auto;
+            padding: 25px;
+        }
+
+        h1, h2 {
+            color: #6D28D9;
+            margin-bottom: 20px;
+        }
+
+        p {
+            margin-bottom: 18px;
+        }
+
+        .card {
+            width: 100%;
+            background: white;
+            padding: 25px;
+            border: 2px solid #DDD6FE;
+            border-radius: 12px;
+            margin-bottom: 30px;
+        }
+
+        .table-container {
+            width: 100%;
+            overflow-x: auto;
+            margin-top: 15px;
+            margin-bottom: 25px;
+            background: white;
+            border-radius: 12px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 650px;
+            background: white;
+        }
+
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+            border: 1px solid #DDD6FE;
+            font-size: 14px;
+        }
+
+        th {
+            background: #7C3AED;
+            color: white;
+            font-weight: bold;
+        }
+
+        tbody tr:nth-child(even) {
+            background: #F5F0FF;
+        }
+
+        tbody tr:hover {
+            background: #FFF0E0;
+        }
+
+        .back {
+            display: inline-block;
+            margin-bottom: 15px;
+            background: #F97316;
+            color: white;
+            padding: 10px 16px;
+            border-radius: 8px;
+            text-decoration: none;;
+            position: absolute;
+            top: 40px;
+            right: 40px;
+        }
+
+        .back:hover {
+            background: #EA580C;
+        }
+
+        .empty-message {
+            background: white;
+            padding: 18px;
+            border-radius: 8px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+
+        <a class="back" href="/admin-dashboard" >
+            Back to Dashboard
+        </a>
+
+        <h1>Website Visitors</h1>
+
+        <!-- OWNER REGISTRATION DETAILS -->
+
+        <div class="card">
+
+            <h2>Owner Registration Details</h2>
+
+            <p>
+                Total Registered Owners: {{ total_owners }}
+            </p>
+
+            {% if owners %}
+
+            <div class="table-container">
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Owner Name</th>
+                            <th>Company</th>
+                            <th>Email</th>
+                            <th>Registration Date &amp; Time</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+
+                        {% for owner in owners %}
+
+                        <tr>
+                            <td>{{ owner.get('owner_name', '') }}</td>
+                            <td>{{ owner.get('company', '') }}</td>
+                            <td>{{ owner.get('email', '') }}</td>
+                            <td>
+                                {{ owner.get('registration_time') or 'Not available' }}
+                            </td>
+                        </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+                </table>
+
+            </div>
+
+            {% else %}
+
+            <p class="empty-message">
+                No owners registered yet.
+            </p>
+
+            {% endif %}
+
+        </div>
+
+
+        <!-- OWNER LOGIN HISTORY -->
+
+        <div class="card">
+
+            <h2>Owner Login History</h2>
+
+            {% if login_history %}
+
+            <div class="table-container">
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Owner Name</th>
+                            <th>Company</th>
+                            <th>Email</th>
+                            <th>Login Date &amp; Time</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+
+                        {% for login in login_history %}
+
+                        <tr>
+                            <td>{{ login.get('owner_name', '') }}</td>
+                            <td>{{ login.get('company', '') }}</td>
+                            <td>{{ login.get('email', '') }}</td>
+                            <td>
+                                {{ login.get('login_at') or 'Not recorded' }}
+                            </td>
+                        </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+                </table>
+
+            </div>
+
+            {% else %}
+
+            <p class="empty-message">
+                No owner logins recorded yet.
+            </p>
+
+            {% endif %}
+
+        </div>
+
+    </div>
+
+</body>
+
+</html>

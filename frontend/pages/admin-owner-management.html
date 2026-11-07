@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Buy | Owner Management</title>
+
+    <style>
+       body {
+    font-family: Arial, sans-serif;
+    background: #F7F3FC;
+    color: #3B245E;
+    margin: 20px;
+}
+
+h1, h2 {
+    color: #6D28D9;
+}
+
+.card, .section {
+    background: white;
+    padding: 15px;
+    margin: 15px 0;
+    border-radius: 8px;
+}
+
+.cards, .details-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.card, .detail-card {
+    flex: 1;
+    min-width: 150px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+}
+
+th, td {
+    padding: 10px;
+    border: 1px solid #ddd;
+    text-align: left;
+}
+
+th {
+    background: #F3E8FF;
+}
+
+.btn {
+    padding: 7px 12px;
+    color: white;
+    text-decoration: none;
+    background: #7C3AED;
+    border-radius: 5px;
+}
+
+.delete-btn {
+    background: #F97316;
+}
+
+img {
+    max-width: 100%;
+}
+
+.back-link {
+    display: inline-block;
+    margin-bottom: 15px;
+    background: #F97316;
+    color: white;
+    padding: 10px 16px;
+    border-radius: 8px;
+    position: absolute;
+    text-decoration:none;
+    top: 40px;
+     right: 40px;
+        }
+.back-link:hover {
+    text-decoration: underline;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="sidebar">
+
+    <h2>Smart Buy</h2>
+    <a href="{{ url_for('admin_dashboard') }}" class="back-link">
+            Back to Dashboard
+        </a>
+
+</div>
+
+
+<div class="main">
+
+    <div class="header">
+        <div>
+            <h1>Owner Management</h1>
+            <p>Manage registered owners and their performance.</p>
+        </div>
+    </div>
+
+
+    <!-- Summary Cards -->
+
+    <div class="cards">
+
+        <div class="card">
+            <h3>Total Owners</h3>
+            <h2>{{ total_owners }}</h2>
+        </div>
+
+        
+
+        <div class="card">
+            <h3>Average Model Accuracy</h3>
+            <h2>{{ average_accuracy }}%</h2>
+        </div>
+
+    </div>
+
+
+    <!-- Registered Owners -->
+
+    <div class="section">
+
+        <h2>Registered Owners</h2>
+
+        <div class="table-container">
+
+            <table>
+
+                <thead>
+                    <tr>
+                        <th>SI No</th>
+                        <th>Owner Name</th>
+                        <th>Company</th>
+                        <th>View</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    {% for owner in owners %}
+
+                    <tr>
+
+                        <td>{{ owner.si_no }}</td>
+
+                        <td>{{ owner.owner_name }}</td>
+
+                        <td>{{ owner.company }}</td>
+
+                        <td>
+                            <a class="btn view-btn"
+                               href="{{ url_for('admin_owner_management', view=owner.email) }}">
+                                View
+                            </a>
+                        </td>
+
+                        <td>
+                            <form method="POST"
+                                action="{{ url_for('delete_owner', email=owner.email) }}"
+                                onsubmit="return confirm('Are you sure you want to delete this owner?');">
+
+                                <button type="submit" class="btn delete-btn">
+                                    Delete
+                                </button>
+
+                            </form>
+                        </td>
+
+                    </tr>
+
+                    {% else %}
+
+                    <tr>
+                        <td colspan="8" class="empty">
+                            No registered owners found.
+                        </td>
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+
+    <!-- Selected Owner Details -->
+
+    {% if selected_owner %}
+
+    <div class="section">
+
+        <h2>Owner Performance Details</h2>
+
+        <div class="details-grid">
+
+            <div class="detail-card">
+                <p>Owner Name</p>
+                <h3>{{ selected_owner.owner_name }}</h3>
+            </div>
+
+            <div class="detail-card">
+                <p>Company</p>
+                <h3>{{ selected_owner.company }}</h3>
+            </div>
+
+            <div class="detail-card">
+                <p>Decision Tree Model Accuracy</p>
+                <h3>{{ selected_owner.model_accuracy }}%</h3>
+            </div>
+
+        </div>
+
+        {% if customer_stats %}
+
+        <br>
+
+        <h2>Customer Summary</h2>
+
+        <div class="details-grid">
+
+            <div class="detail-card">
+                <p>Total Customers</p>
+                <h3>{{ customer_stats.total_customers }}</h3>
+            </div>
+
+            <div class="detail-card">
+                <p>Male Customers</p>
+                <h3>{{ customer_stats.male_count }}</h3>
+            </div>
+
+            <div class="detail-card">
+                <p>Female Customers</p>
+                <h3>{{ customer_stats.female_count }}</h3>
+            </div>
+
+            <div class="detail-card">
+                <p>Purchase Rate</p>
+                <h3>{{ customer_stats.purchase_rate }}%</h3>
+            </div>
+
+        </div>
+
+        <br>
+
+        <h2>Gender-wise Purchase Analysis</h2>
+
+        {% if gender_chart %}
+
+        <div class="chart">
+            <img src="data:image/png;base64,{{ gender_chart }}"
+                 alt="Gender-wise Purchase Analysis">
+        </div>
+
+        {% else %}
+
+        <p class="empty">Gender-wise chart data is unavailable.</p>
+
+        {% endif %}
+
+        {% else %}
+
+        <p class="empty">
+            No uploaded customer dataset is available for this owner.
+        </p>
+
+        {% endif %}
+
+    </div>
+
+    {% endif %}
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Smart Buy | Owner Registration</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #F3E8FF, #FFF0E0);
+            color: #3B245E;
+            padding: 20px;
+        }
+
+        .register-card {
+            width: 100%;
+            max-width: 480px;
+            padding: 30px;
+            background: white;
+            border-radius: 18px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
+        }
+
+        h1 {
+            text-align: center;
+            color: #7C3AED;
+            margin-bottom: 8px;
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 25px;
+            font-weight: normal;
+        }
+
+        label {
+            display: block;
+            margin-top: 15px;
+            margin-bottom: 7px;
+            font-weight: bold;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #D6C8E8;
+            border-radius: 8px;
+            font-size: 15px;
+        }
+
+        button {
+            width: 100%;
+            margin-top: 25px;
+            padding: 14px;
+            border: none;
+            border-radius: 8px;
+            background: linear-gradient(90deg, #7C3AED, #F97316);
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        button:hover {
+            opacity: 0.9;
+        }
+
+        .message {
+            text-align: center;
+            margin: 12px 0;
+            overflow-wrap: anywhere;
+        }
+
+        .error {
+            color: #B91C1C;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        a {
+            color: #7C3AED;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="register-card">
+
+    <h1>🛍️ Smart Buy</h1>
+    <h2>Owner Registration</h2>
+
+    {% if error %}
+        <div class="message error">{{ error }}</div>
+    {% endif %}
+
+    <form action="{{ url_for('owner_register') }}" method="POST">
+
+        <label for="owner_name">Owner Name</label>
+        <input
+            type="text"
+            id="owner_name"
+            name="owner_name"
+            placeholder="Enter owner name"
+            required
+        >
+
+        <label for="company">Company Name</label>
+        <input
+            type="text"
+            id="company"
+            name="company"
+            placeholder="Enter company name"
+            required
+        >
+
+        <label for="email">Email</label>
+        <input
+            type="email"
+            id="email"
+            name="email"
+            placeholder="Enter email address"
+            required
+        >
+
+        <label for="password">Password</label>
+        <input
+            type="password"
+            id="password"
+            name="password"
+            placeholder="Create password"
+            required
+        >
+
+        <button type="submit">Register</button>
+
+    </form>
+
+    <div class="footer">
+        Already registered?
+        <a href="{{ url_for('owner_login') }}">Login</a>
+        <br><br>
+        <a href="/">Back to Home</a>
+    </div>
+
+</div>
+
+{% if registration_success %}
+<script>
+    alert("Registration successful!");
+
+    window.location.href = "{{ url_for('owner_dashboard') }}";
+</script>
+{% endif %}
+
+</body>
+</html>

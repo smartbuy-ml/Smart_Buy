@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Smart Buy | Graph Analysis</title>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #F8F3FF;
+            color: #3B245E;
+        }
+
+        
+        .container {
+            max-width: 950px;
+            margin: 25px auto;
+            padding: 80px;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-bottom: 15px;
+            background: #F97316;
+            color: white;
+            padding: 10px 16px;
+            border-radius: 8px;
+            position: absolute;
+            text-decoration:none;
+            top: 40px;
+            right: 40px;
+        }
+
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        .chart-card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+        }
+
+        h2 {
+            text-align: center;
+            color: #6D28D9;
+            font-size: 21px;
+        }
+
+        .chart-container {
+            height: 380px;
+            position: relative;
+        }
+
+        .empty-message {
+            text-align: center;
+            padding: 25px 10px;
+            line-height: 1.6;
+        }
+
+        footer {
+            text-align: center;
+            padding: 15px;
+            color: #76658A;
+        }
+
+        @media (max-width: 600px) {
+            .chart-container {
+                height: 300px;
+            }
+
+            .chart-card {
+                padding: 12px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    
+
+    <div class="container">
+
+        <a href="{{ url_for('admin_dashboard') }}" class="back-link">
+            Back to Dashboard
+        </a>
+
+        <div class="chart-card">
+
+            <h2>Owner-wise Decision Tree Accuracy</h2>
+
+            {% if owner_names %}
+
+            <div class="chart-container">
+                <canvas id="accuracyChart"></canvas>
+            </div>
+
+            {% else %}
+
+            <div class="empty-message">
+                <h3>No Accuracy Data Available</h3>
+                <p>
+                    The graph will appear after valid model accuracy
+                    values are saved in owner_accuracy.csv.
+                </p>
+            </div>
+
+            {% endif %}
+
+        </div>
+
+    </div>
+
+    <footer>
+        Smart Buy | Admin Panel
+    </footer>
+
+    {% if owner_names %}
+    <script type="application/json" id="owner-names-data">
+        {{ owner_names | tojson }}
+    </script>
+
+    <script type="application/json" id="accuracy-data">
+        {{ model_accuracies | tojson }}
+    </script>
+
+    <script>
+        const ownerNames = JSON.parse(
+        document.getElementById("owner-names-data").textContent
+        );
+
+        const modelAccuracies = JSON.parse(
+        document.getElementById("accuracy-data").textContent
+        );
+
+        new Chart(document.getElementById('accuracyChart'), {
+            type: 'line',
+
+            data: {
+                labels: ownerNames,
+
+                datasets: [{
+                    label: 'Model Accuracy',
+                    data: modelAccuracies,
+                    borderColor: '#7C3AED',
+                    backgroundColor: 'rgba(124, 58, 237, 0.10)',
+                    pointBackgroundColor: '#F97316',
+                    borderWidth: 2,
+                    pointRadius: 5,
+                    tension: 0.3,
+                    fill: true
+                }]
+            },
+
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+
+                plugins: {
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                return 'Accuracy: ' +
+                                    context.parsed.y + '%';
+                            }
+                        }
+                    }
+                },
+
+                scales: {
+                    y: {
+                        min: 0,
+                        max: 100,
+                        title: {
+                            display: true,
+                            text: 'Accuracy (%)'
+                        },
+                        ticks: {
+                            callback: function(value) {
+                                return value + '%';
+                            }
+                        }
+                    },
+
+                    x: {
+                        title: {
+                            display: true,
+                            text: 'Owner Name'
+                        }
+                    }
+                }
+            }
+        });
+    </script>
+    {% endif %}
+
+</body>
+</html>

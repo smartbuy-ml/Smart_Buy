@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Buy | Owner Dashboard</title>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            padding: 25px;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #F3E8FF, #FFF0E0);
+            color: #3B245E;
+        }
+
+        .page {
+            max-width: 1150px;
+            margin: auto;
+        }
+
+        .welcome {
+            margin-bottom: 25px;
+        }
+
+        h1, h2, h3 {
+            color: #6D28D9;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.94);
+            border: 1px solid #E9D5FF;
+            border-radius: 15px;
+            padding: 24px;
+            margin-bottom: 22px;
+            box-shadow: 0 5px 18px #3B245E12;
+        }
+        .charts-container {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 20px;
+            width: 100%;
+            margin: 25px 0;
+        }
+
+        .chart-card {
+            background: rgba(255, 255, 255, 0.95);
+            border: 1px solid #e9d5ff;
+            border-radius: 20px;
+            padding: 22px;
+            min-width: 0;
+            box-shadow: 0 5px 18px rgba(124, 58, 237, 0.08);
+        }
+
+        .chart-card h3 {
+            color: #4c1d95;
+            margin: 0 0 20px;
+            font-size: 21px;
+        }
+
+        .chart-area {
+            position: relative;
+            height: 300px;
+            width: 100%;
+        }
+
+@media (max-width: 700px) {
+    .charts-container {
+        grid-template-columns: 1fr;
+    }
+
+    .chart-area {
+        height: 260px;
+    }
+}   
+
+        .upload-box {
+            border: 2px dashed #C4B5FD;
+            background: #FAF5FF;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 18px 0;
+        }
+
+        input[type="file"] {
+            width: 100%;
+            max-width: 500px;
+            padding: 12px;
+            border: 1px solid #D8B4FE;
+            border-radius: 8px;
+            background: white;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            background: #7C3AED;
+            color: white;
+            font-weight: bold;
+            text-decoration: none;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        .btn:hover {
+            background: #F97316;
+        }
+
+        .orange {
+            background: #F97316;
+        }
+
+        .orange:hover {
+            background: #EA580C;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 18px;
+            margin-bottom: 22px;
+        }
+
+        .stat {
+            background: white;
+            border-left: 5px solid #7C3AED;
+            padding: 22px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px #3B245E10;
+            overflow-wrap: anywhere;
+        }
+
+        .stat:nth-child(2) {
+            border-left-color: #F97316;
+        }
+
+        .stat:nth-child(3) {
+            border-left-color: #A78BFA;
+        }
+
+        .number {
+            font-size: 30px;
+            font-weight: bold;
+            color: #6D28D9;
+            margin-top: 10px;
+        }
+
+        
+        .table-wrap {
+            width: 100%;
+            max-height: 450px;
+            overflow: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 650px;
+            margin-top: 15px;
+        }
+
+        thead th {
+            position: sticky;
+            top: 0;
+            z-index: 2;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border: 1px solid #E9D5FF;
+        }
+
+        th {
+            background: #7C3AED;
+            color: white;
+        }
+
+        tr:nth-child(even) {
+            background: #FAF5FF;
+        }
+
+        .message {
+            padding: 12px;
+            margin: 15px 0;
+            border-radius: 8px;
+            background: #FEE2E2;
+            color: #991B1B;
+        }
+
+        .success {
+            background: #DCFCE7;
+            color: #166534;
+        }
+
+        footer {
+            text-align: center;
+            margin: 30px 0 10px;
+            color: #6B5A80;
+        }
+
+        @media (max-width: 700px) {
+            body {
+                padding: 14px;
+            }
+
+            .stats, .charts {
+                grid-template-columns: 1fr;
+            }
+
+            .card {
+                padding: 17px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+<h1 style="text-align: center; color: #7c3aed;">
+     🛍️ Smart Buy - Owner Dashboard
+</h1>
+
+<div class="dashboard-buttons">
+
+    <a href="/upload-dataset" class="btn">
+        Upload Dataset
+    </a>
+
+    <a href="/prediction" class="btn">
+        Purchase Prediction
+    </a>
+
+    <a href="{{ url_for('owner_feedback') }}" class="btn">
+        Owner Feedback
+    </a>
+
+    <a href="{{ url_for('logout_page') }}" class="btn orange">
+            Logout
+    </a>
+
+</div>
+<div class="page">
+
+    <!-- WELCOME AND LOGOUT -->
+    <div class="welcome">
+        <h1>Welcome, {{ session.get('owner_name', 'Owner') }}! 👋</h1>
+
+        <p>
+            Upload your company's customer dataset to view details
+            and predict purchases.
+        </p>
+
+        
+    </div>
+
+    <!-- SUCCESS MESSAGE -->
+    {% if request.args.get('uploaded') %}
+        <div class="message success">
+            CSV uploaded successfully!
+        </div>
+    {% endif %}
+
+    <!-- ERROR MESSAGE -->
+    {% if error %}
+        <div class="message">{{ error }}</div>
+    {% endif %}
+
+    <!-- UPLOAD CSV -->
+    <section class="card">
+        <h2>📁 Upload Customer Dataset</h2>
+
+        <p>
+            Select your customer CSV file. The file will be stored
+            separately for your account.
+        </p>
+
+        <form action="{{ url_for('upload_dataset') }}"
+              method="POST"
+              enctype="multipart/form-data">
+
+            <label for="customer_file">
+                <strong>Select CSV file:(file should be conain:Age,Gender,Category,Purchase_status)</strong>
+            </label>
+
+            <div class="upload-box">
+                <input type="file"
+                       id="customer_file"
+                       name="customer_file"
+                       accept=".csv"
+                       required>
+            </div>
+
+            <button class="btn" type="submit">
+                ⬆ Upload Dataset
+            </button>
+            
+
+            <a href="{{ url_for('remove_dataset') }}"
+                class="btn orange"
+                onclick="return confirm('Are you sure you want to remove your uploaded dataset?');">
+                🗑 Remove Uploaded File
+            </a>
+        </form>
+    </section>
+
+    <!-- FILE DETAILS -->
+    <section class="stats">
+
+        <div class="stat">
+            <div>👥 Total Customers</div>
+            <div class="number">{{ total_customers | default(0) }}</div>
+        </div>
+
+        <div class="stat">
+            <div>📄 Uploaded File</div>
+            <p>
+                <strong>{{ uploaded_filename or 'No file uploaded' }}</strong>
+            </p>
+        </div>
+
+        <div class="stat">
+            <div>🛍️ Purchase Status</div>
+            <div class="number">
+                {{ purchase_count | default(0) }} /
+                {{ no_purchase_count | default(0) }}
+            </div>
+            <small>Yes / No</small>
+        </div>
+
+    </section>
+
+    <!-- CUSTOMER RECORDS -->
+    <section class="card">
+        <h2>📋 Uploaded Customer Details</h2>
+        <p>Customer records from your uploaded CSV file.</p>
+
+        {% if columns and customer_data %}
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            {% for column in columns %}
+                                <th>{{ column }}</th>
+                            {% endfor %}
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        {% for customer in customer_data %}
+                            <tr>
+                                {% for column in columns %}
+                                    <td>{{ customer[column] }}</td>
+                                {% endfor %}
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% else %}
+            <p>No customer dataset is displayed yet. Upload a CSV file above.</p>
+        {% endif %}
+    </section>
+
+    <!-- CUSTOMER DATA ANALYSIS -->
+    <section class="card">
+        <h2>📊 Customer Dataset Analysis</h2>
+        <div class="charts-container">
+
+    <!-- Left: Purchase vs No Purchase -->
+    <div class="chart-card">
+        <h3>🛒 Purchase vs No Purchase</h3>
+        <div class="chart-area">
+            <canvas id="purchaseChart"></canvas>
+        </div>
+    </div>
+
+    <!-- Right: Gender Distribution -->
+    <div class="chart-card">
+        <h3>⚥ Gender Distribution</h3>
+        <div class="chart-area">
+            <canvas id="genderChart"></canvas>
+        </div>
+    </div>
+
+
+</div>
+
+<!-- CIRCULAR MODEL ACCURACY -->
+<div class="accuracy-card">
+
+    <h3>🎯 Decision Tree Model Accuracy</h3>
+
+    {% if model_accuracy is not none %}
+
+        <div class="accuracy-circle"
+             style="--accuracy: {{ model_accuracy }};">
+
+            <div class="accuracy-inner">
+                <span class="accuracy-number">
+                    {{ model_accuracy }}%
+                </span>
+            </div>
+
+        </div>
+
+        <p>
+            Model accuracy calculated using test data.
+        </p>
+
+        <p>
+            Total Uploaded Customers:
+            <strong>{{ total_customers }}</strong>
+        </p>
+
+    {% elif accuracy_message %}
+
+        <p class="accuracy-message">
+            {{ accuracy_message }}
+        </p>
+
+    {% else %}
+
+        <p>
+            Upload a suitable CSV file to calculate model accuracy.
+        </p>
+
+    {% endif %}
+
+</div>
+
+<style>
+    .accuracy-card {
+        background: white;
+        border: 2px solid #DDD6FE;
+        border-radius: 15px;
+        padding: 25px;
+        margin: 25px 0;
+        text-align: center;
+        box-shadow: 0 4px 12px rgba(124, 58, 237, 0.10);
+    }
+
+    .accuracy-card h3 {
+        color: #6D28D9;
+        margin-bottom: 25px;
+    }
+
+    .accuracy-circle {
+        width: 170px;
+        height: 170px;
+        margin: 0 auto 20px;
+        border-radius: 50%;
+
+        background: conic-gradient(
+            #7C3AED calc(var(--accuracy) * 1%),
+            #E9D5FF 0
+        );
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .accuracy-inner {
+        width: 135px;
+        height: 135px;
+        background: white;
+        border-radius: 50%;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .accuracy-number {
+        color: #F97316;
+        font-size: 32px;
+        font-weight: bold;
+    }
+
+    .accuracy-card p {
+        color: #3B245E;
+        margin: 12px 0;
+    }
+
+    .accuracy-message {
+        color: #B45309 !important;
+    }
+</style>
+    <!-- PURCHASE PREDICTION -->
+    <section class="card">
+        <h2>🤖 Purchase Prediction</h2>
+
+        <p>
+            Use a Decision Tree model trained on your uploaded customer
+            dataset to predict whether a customer may purchase an item.
+        </p>
+
+        <a href="{{ url_for('prediction') }}" class="btn orange">
+            Go to Purchase Prediction →
+        </a>
+        
+    </section>
+
+    <footer>
+        © 2026 Smart Buy | Customer Purchase Prediction
+    </footer>
+
+</div>
+
+<!-- GRAPHS -->
+{% if total_customers | default(0) > 0 %}
+
+<div
+    id="chart-data"
+    data-purchase-labels='{{ purchase_labels | tojson | forceescape }}'
+    data-purchase-values='{{ purchase_values | tojson | forceescape }}'
+    data-gender-labels='{{ gender_labels | tojson | forceescape }}'
+    data-gender-values='{{ gender_values | tojson | forceescape }}'
+    hidden>
+</div>
+
+<script>
+    const chartData = document.getElementById("chart-data");
+    const purchaseLabels = JSON.parse(chartData.dataset.purchaseLabels);
+    const purchaseValues = JSON.parse(chartData.dataset.purchaseValues);
+
+    const genderLabels = JSON.parse(chartData.dataset.genderLabels);
+    const genderValues = JSON.parse(chartData.dataset.genderValues);
+    // Purchase vs No Purchase - left chart
+    new Chart(document.getElementById("purchaseChart"), {
+        type: "doughnut",
+        data: {
+            labels: purchaseLabels,
+            datasets: [{
+                label: "Customers",
+                data: purchaseValues,
+                backgroundColor: ["#7C3AED", "#F97316"],
+                borderWidth: 2,
+                borderColor: "#ffffff"
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false
+        }
+    });
+
+    // Gender Distribution - right chart
+    new Chart(document.getElementById("genderChart"), {
+        type: "bar",
+        data: {
+            labels: genderLabels,
+            datasets: [{
+                label: "Customers",
+                data: genderValues,
+                backgroundColor: ["#8B5CF6", "#F97316"],
+                borderRadius: 8,
+                maxBarThickness: 100
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    display: false
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        precision: 0
+                    }
+                }
+            }
+        }
+    });
+</script>
+{% endif %}
+
+</body>
+{% if request.args.get('registered') == '1' %}
+<script>
+    alert("Registration successful!");
+    window.history.replaceState({}, document.title, "/owner-dashboard");
+</script>
+{% endif %}
+</html>

@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Smart Buy | Admin Dashboard</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #F3E8FF, #FFF0E0);
+            color: #3B245E;
+            min-height: 100vh;
+        }
+
+        nav {
+            background: linear-gradient(90deg, #7C3AED, #F97316);
+            padding: 18px 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+        }
+
+        nav h2, nav a {
+            color: white;
+        }
+
+        nav a {
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .welcome {
+            text-align: center;
+            padding: 50px 20px 30px;
+        }
+
+        .welcome h1 {
+            color: #6D28D9;
+            margin-bottom: 15px;
+        }
+
+        .welcome p {
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1250px;
+            margin: auto;
+            padding: 20px;
+        }
+
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 22px;
+        }
+
+        .card {
+            background: #fffef8;
+            padding: 25px 15px;
+            border: 2px solid #DDD6FE;
+            border-radius: 16px;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(59, 36, 94, 0.10);
+        }
+
+        .card h3 {
+            color: #7C3AED;
+            margin-bottom: 12px;
+            font-size: 20px;
+        }
+
+        .card p {
+            color: #555;
+            font-size: 14px;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .btn {
+            display: inline-block;
+            background: #7C3AED;
+            color: white;
+            padding: 11px 14px;
+            border-radius: 7px;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .btn:hover {
+            background: #F97316;
+        }
+
+        footer {
+            text-align: center;
+            padding: 25px 10px;
+            margin-top: 20px;
+        }
+
+        @media (max-width: 950px) {
+            .cards {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+        }
+
+        @media (max-width: 500px) {
+            .cards {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    
+    <!-- Navigation -->
+    <nav>
+        <h2>🛍️ Smart Buy Admin</h2>
+
+        <a href="/admin-logout"
+           onclick="return confirm('Do you want to log out?')">
+            Admin Logout
+        </a>
+    </nav>
+
+    <!-- Welcome Section -->
+    <section class="welcome">
+        <h1>Welcome, {{ admin_name }}!</h1>
+
+        <p>
+            Welcome to the Smart Buy Admin Dashboard.
+            <br>
+            Manage website visitors, monitor owner performance
+            and view owner feedback.
+        </p>
+    </section>
+
+    <!-- Dashboard Cards -->
+    <div class="container">
+        <div class="cards">
+
+            <!-- Website Visitor -->
+            <div class="card">
+                <h3>Website Visitor</h3>
+
+                <p>
+                    View registered owners' details and login history.
+                </p>
+
+                <a href="/admin-visitors" class="btn">
+                    View Visitors
+                </a>
+            </div>
+
+            <!-- Owner Management -->
+            <div class="card">
+                <h3>Owner Management</h3>
+
+                <p>
+                    View registered owner details and model accuracy.
+                </p>
+
+                <a href="{{ url_for('admin_owner_management') }}"
+                   class="btn">
+                    Owner Management
+                </a>
+            </div>
+
+            <!-- Owner Feedback -->
+            <div class="card">
+                <h3>Owner Feedback</h3>
+
+                <p>
+                    View feedback from all owners and manage feedback.
+                </p>
+
+                <a href="/admin-feedback" class="btn">
+                    View Feedback
+                </a>
+            </div>
+
+            <!-- Graph Analysis -->
+            <div class="card">
+                <h3>Graph Analysis</h3>
+
+                <p>
+                    Quick view of customer performance through graphs.
+                </p>
+
+                <a href="/admin-graphs-analysis" class="btn">
+                    View Graphs
+                </a>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <p>© 2026 Smart Buy | Admin Panel</p>
+    </footer>
+
+</body>
+</html>

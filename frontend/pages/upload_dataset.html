@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Smart Buy | Upload Customer Dataset</title>
+
+    <!-- Chart.js for graphs -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #F3E8FF, #FFF0E0);
+            color: #3B245E;
+            padding: 25px;
+        }
+
+        .container {
+            max-width: 1250px;
+            margin: auto;
+        }
+
+        .page-header {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .page-header h1 {
+            color: #7C3AED;
+            margin-bottom: 8px;
+            font-size: 30px;
+        }
+
+        .page-header p {
+            color: #6B5B7A;
+        }
+
+        .upload-card {
+            background: white;
+            padding: 25px;
+            border-radius: 16px;
+            margin-bottom: 25px;
+            box-shadow: 0 5px 20px rgba(80, 40, 120, 0.10);
+            border-top: 5px solid #F97316;
+        }
+
+        .upload-card h2 {
+            color: #6D28D9;
+            margin-bottom: 18px;
+        }
+
+        .upload-form {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        input[type="file"] {
+            flex: 1;
+            min-width: 220px;
+            padding: 12px;
+            border: 1px solid #DDD6FE;
+            border-radius: 8px;
+            background: #FAF5FF;
+        }
+
+        .btn {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            background: #7C3AED;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn:hover {
+            background: #F97316;
+        }
+
+        .section-card {
+            background: white;
+            padding: 24px;
+            border-radius: 16px;
+            margin-bottom: 25px;
+            box-shadow: 0 5px 20px rgba(80, 40, 120, 0.10);
+        }
+
+        .section-title {
+            color: #6D28D9;
+            font-size: 22px;
+            margin-bottom: 18px;
+        }
+
+        .message {
+            padding: 12px;
+            margin-bottom: 18px;
+            border-radius: 8px;
+            background: #F3E8FF;
+            color: #6D28D9;
+        }
+
+        .table-wrapper {
+            width: 100%;
+            overflow-x: auto;
+            border-radius: 10px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 600px;
+        }
+
+        th {
+            background: #7C3AED;
+            color: white;
+            padding: 13px;
+            text-align: left;
+            border: 1px solid #C4B5FD;
+            white-space: nowrap;
+        }
+
+        td {
+            padding: 12px;
+            border: 1px solid #E9D5FF;
+            text-align: left;
+        }
+
+        tbody tr:nth-child(even) {
+            background: #FAF5FF;
+        }
+
+        tbody tr:hover {
+            background: #FFF0E0;
+        }
+
+        .empty-message {
+            text-align: center;
+            padding: 25px;
+            color: #777;
+        }
+
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 18px;
+            margin-bottom: 25px;
+        }
+
+        .summary-card {
+            background: white;
+            padding: 22px;
+            border-radius: 14px;
+            border-left: 5px solid #7C3AED;
+            box-shadow: 0 4px 15px rgba(80, 40, 120, 0.10);
+        }
+
+        .summary-card:nth-child(even) {
+            border-left-color: #F97316;
+        }
+
+        .summary-card h3 {
+            font-size: 14px;
+            color: #76658A;
+            margin-bottom: 12px;
+        }
+
+        .summary-card p {
+            font-size: 28px;
+            font-weight: bold;
+            color: #6D28D9;
+            overflow-wrap: anywhere;
+        }
+
+        .charts-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 22px;
+        }
+
+        .chart-card {
+            background: white;
+            padding: 20px;
+            border-radius: 14px;
+            border: 1px solid #E9D5FF;
+            min-width: 0;
+        }
+
+        .chart-card h3 {
+            color: #6D28D9;
+            margin-bottom: 18px;
+            font-size: 18px;
+        }
+
+        .chart-box {
+            height: 300px;
+            position: relative;
+        }
+
+        .chart-note {
+            color: #76658A;
+            font-size: 13px;
+            margin-top: 12px;
+        }
+
+        .bottom-actions {
+            text-align: center;
+            margin: 25px 0;
+        }
+
+        @media (max-width: 700px) {
+            body {
+                padding: 12px;
+            }
+
+            .charts-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .page-header h1 {
+                font-size: 25px;
+            }
+
+            .section-card {
+                padding: 16px;
+            }
+
+            .upload-form {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            input[type="file"] {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <!-- Page heading -->
+    <header class="page-header">
+        <h1>Smart Buy</h1>
+        <p>Customer Purchase Prediction & Analytics</p>
+    </header>
+
+    <!-- CSV upload section -->
+    <section class="upload-card">
+
+        <h2>Upload Customer Dataset</h2>
+
+        <p style="margin-bottom: 18px; color: #76658A;">
+            Upload your company's customer CSV file to view its details and analytics.
+        </p>
+
+        <form
+            class="upload-form"
+            action="{{ url_for('upload_dataset') }}"
+            method="POST"
+            enctype="multipart/form-data"
+        >
+            <input
+                type="file"
+                name="dataset"
+                accept=".csv,text/csv"
+                required
+            >
+
+            <button type="submit" class="btn">
+                Upload Dataset
+            </button>
+        </form>
+
+        {% if message %}
+            <div class="message" style="margin-top: 18px;">
+                {{ message }}
+            </div>
+        {% endif %}
+
+    </section>
+
+    <input
+    type="text"
+    id="searchInput"
+    placeholder="Search customers..."
+    onkeyup="searchCustomers()"
+    style="width:100%; padding:12px; margin:15px 0;
+           border:1px solid #7c3aed; border-radius:8px;"
+>
+
+    <!-- Uploaded CSV table -->
+    <section class="section-card">
+
+        <h2 class="section-title">Uploaded Customer Data</h2>
+
+        {% if filename %}
+            <p style="margin-bottom: 15px; color: #76658A;">
+                File: <strong>{{ filename }}</strong>
+            </p>
+        {% endif %}
+
+        <div class="table-wrapper">
+
+            {% if columns and rows %}
+
+                <table id="customerTable">
+
+                    <thead>
+                        <tr>
+                            {% for column in columns %}
+                                <th>{{ column }}</th>
+                            {% endfor %}
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        {% for row in rows %}
+                            <tr>
+                                {% for column in columns %}
+                                    <td>{{ row[column] }}</td>
+                                {% endfor %}
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+
+                </table>
+
+            {% else %}
+
+                <div class="empty-message">
+                    No customer dataset available.
+                    Please upload a CSV file to display its records.
+                </div>
+
+            {% endif %}
+
+        </div>
+
+    </section>
+
+    <!-- Customer summary -->
+    <section>
+
+        <h2 class="section-title">Customer Summary</h2>
+
+        <div class="summary-grid">
+
+            <div class="summary-card">
+                <h3>Total Customers</h3>
+                <p id="totalCustomers">0</p>
+            </div>
+
+            <div class="summary-card">
+                <h3>Male Customers</h3>
+                <p id="maleCustomers">0</p>
+            </div>
+
+            <div class="summary-card">
+                <h3>Female Customers</h3>
+                <p id="femaleCustomers">0</p>
+            </div>
+
+            <div class="summary-card">
+                <h3>Purchase Categories</h3>
+                <p id="totalCategories">0</p>
+            </div>
+
+            <div class="summary-card">
+                <h3>Shopping Apps</h3>
+                <p id="totalApps">0</p>
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- Analytics graphs -->
+    <section class="section-card">
+
+        <h2 class="section-title">Customer Analytics</h2>
+
+        <div class="charts-grid">
+
+            <div class="chart-card">
+                <h3>Gender Distribution</h3>
+                <div class="chart-box">
+                    <canvas id="genderChart"></canvas>
+                </div>
+            </div>
+
+            <div class="chart-card">
+                <h3>Purchase Category Distribution</h3>
+                <div class="chart-box">
+                    <canvas id="categoryChart"></canvas>
+                </div>
+            </div>
+
+            <div class="chart-card">
+                <h3>Shopping App Distribution</h3>
+                <div class="chart-box">
+                    <canvas id="appChart"></canvas>
+                </div>
+            </div>
+
+            <div class="chart-card">
+                <h3>Customer Age Distribution</h3>
+                <div class="chart-box">
+                    <canvas id="ageChart"></canvas>
+                </div>
+            </div>
+
+        </div>
+
+        <p class="chart-note">
+            Charts are generated from the customer records displayed in the table.
+            If a field is missing from the uploaded CSV, its chart will show no data.
+        </p>
+
+    </section>
+
+    <!-- Navigation -->
+    <div class="bottom-actions">
+        <a href="{{ url_for('owner_dashboard') }}" class="btn">
+            Back to Dashboard
+        </a>
+    </div>
+
+</div>
+
+<script>
+    /*
+       Read customer records from the table.
+       No example customer data is added here.
+    */
+
+    const table = document.getElementById("customerTable");
+
+    const records = [];
+    const headers = [];
+
+    if (table) {
+        table.querySelectorAll("thead th").forEach(th => {
+            headers.push(th.textContent.trim());
+        });
+
+        table.querySelectorAll("tbody tr").forEach(tr => {
+            const cells = Array.from(tr.querySelectorAll("td"));
+
+            if (cells.length === headers.length) {
+                const record = {};
+
+                headers.forEach((header, index) => {
+                    record[header] = cells[index].textContent.trim();
+                });
+
+                records.push(record);
+            }
+        });
+    }
+
+    // Find a column even if its name uses different capitalization.
+    function findColumn(possibleNames) {
+        return headers.find(header =>
+            possibleNames.includes(
+                header.trim().toLowerCase().replace(/[\s_-]+/g, "")
+            )
+        );
+    }
+
+    const genderColumn = findColumn(["gender", "sex"]);
+    const categoryColumn = findColumn([
+        "previouspurchase",
+        "purchase",
+        "category",
+        "purchasecategory"
+    ]);
+    const appColumn = findColumn([
+        "shoppingapp",
+        "app",
+        "platform",
+        "shoppingplatform"
+    ]);
+    const ageColumn = findColumn(["age"]);
+
+    // Count values in a selected column.
+    function countValues(column, normalize = false) {
+        const counts = {};
+
+        if (!column) {
+            return counts;
+        }
+
+        records.forEach(record => {
+            let value = record[column];
+
+            if (!value || value.trim() === "") {
+                return;
+            }
+
+            value = value.trim();
+
+            if (normalize) {
+                value = value.toLowerCase();
+
+                if (value === "m") value = "Male";
+                else if (value === "f") value = "Female";
+                else value = value.charAt(0).toUpperCase() + value.slice(1);
+            }
+
+            counts[value] = (counts[value] || 0) + 1;
+        });
+
+        return counts;
+    }
+
+    const genderCounts = countValues(genderColumn, true);
+    const categoryCounts = countValues(categoryColumn);
+    const appCounts = countValues(appColumn);
+
+    // Update summary cards.
+    document.getElementById("totalCustomers").textContent = records.length;
+
+    document.getElementById("maleCustomers").textContent =
+        Object.entries(genderCounts)
+            .filter(([key]) => key.toLowerCase() === "male")
+            .reduce((sum, [, value]) => sum + value, 0);
+
+    document.getElementById("femaleCustomers").textContent =
+        Object.entries(genderCounts)
+            .filter(([key]) => key.toLowerCase() === "female")
+            .reduce((sum, [, value]) => sum + value, 0);
+
+    document.getElementById("totalCategories").textContent =
+        Object.keys(categoryCounts).length;
+
+    document.getElementById("totalApps").textContent =
+        Object.keys(appCounts).length;
+
+    // Create charts.
+    function createChart(canvasId, type, counts, label) {
+        const canvas = document.getElementById(canvasId);
+
+        if (!canvas) return;
+
+        const labels = Object.keys(counts);
+        const values = Object.values(counts);
+
+        if (labels.length === 0) {
+            const message = document.createElement("p");
+            message.textContent = "No data available for this chart.";
+            message.style.color = "#76658A";
+            canvas.replaceWith(message);
+            return;
+        }
+
+        new Chart(canvas, {
+            type: type,
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: label,
+                    data: values,
+                    backgroundColor: [
+                        "#7C3AED",
+                        "#F97316",
+                        "#A78BFA",
+                        "#FDBA74",
+                        "#C4B5FD",
+                        "#FB923C",
+                        "#DDD6FE",
+                        "#FED7AA"
+                    ],
+                    borderColor: "#FFFFFF",
+                    borderWidth: 2
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: "bottom"
+                    }
+                },
+                scales: type === "bar" ? {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            precision: 0
+                        }
+                    }
+                } : {}
+            }
+        });
+    }
+
+    // Gender: pie chart.
+    createChart(
+        "genderChart",
+        "pie",
+        genderCounts,
+        "Customers"
+    );
+
+    // Purchase categories: bar chart.
+    createChart(
+        "categoryChart",
+        "bar",
+        categoryCounts,
+        "Customers"
+    );
+
+    // Shopping apps: doughnut chart.
+    createChart(
+        "appChart",
+        "doughnut",
+        appCounts,
+        "Customers"
+    );
+
+    // Age groups: bar chart.
+    function getAgeGroups() {
+        const groups = {
+            "Under 18": 0,
+            "18–25": 0,
+            "26–35": 0,
+            "36–45": 0,
+            "Above 45": 0
+        };
+
+        if (!ageColumn) {
+            return {};
+        }
+
+        records.forEach(record => {
+            const age = Number(record[ageColumn]);
+
+            if (!Number.isFinite(age) || age <= 0) {
+                return;
+            }
+
+            if (age < 18) groups["Under 18"]++;
+            else if (age <= 25) groups["18–25"]++;
+            else if (age <= 35) groups["26–35"]++;
+            else if (age <= 45) groups["36–45"]++;
+            else groups["Above 45"]++;
+        });
+
+        return groups;
+    }
+
+    createChart(
+        "ageChart",
+        "bar",
+        getAgeGroups(),
+        "Customers"
+    );
+</script>
+<script>
+function searchCustomers() {
+    let input = document.getElementById("searchInput").value.toLowerCase();
+    let rows = document.querySelectorAll("#customerTable tbody tr");
+
+    rows.forEach(row => {
+        row.style.display = row.innerText.toLowerCase().includes(input)
+            ? ""
+            : "none";
+    });
+}
+</script>
+
+</body>
+</html>

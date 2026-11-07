@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Performance | Smart Buy</title>
+
+    <style>
+        body {
+            margin: 0;
+            padding: 25px;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #F3E8FF, #FFF0E0);
+            color: #3B245E;
+        }
+
+        h1, h2 {
+            color: #6D28D9;
+        }
+
+        .companies {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            margin: 25px 0;
+        }
+
+        .card {
+            background: white;
+            padding: 22px;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: 0 4px 12px #00000012;
+        }
+
+        .card h3 {
+            margin-top: 0;
+            color: #7C3AED;
+        }
+
+        .count {
+            font-size: 30px;
+            font-weight: bold;
+            color: #F97316;
+        }
+
+        .table-container {
+            overflow-x: auto;
+            background: white;
+            padding: 15px;
+            border-radius: 12px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #E9D5FF;
+        }
+
+        th {
+            background: #7C3AED;
+            color: white;
+        }
+
+        a {
+            color: #7C3AED;
+            font-weight: bold;
+            text-decoration: none;
+        }
+
+        .back {
+            display: inline-block;
+            margin-bottom: 15px;
+            background: #F97316;
+            color: white;
+            padding: 10px 16px;
+            text-decoration: none;
+            border-radius: 8px;
+            position: absolute;
+            top: 40px;
+            right: 40px;
+        }
+        @media (max-width: 700px) {
+            .companies {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 400px) {
+            .companies {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    
+
+    <a class="back" href="/admin-dashboard">Back to Dashboard</a>
+
+    <h1>Owner Performance</h1>
+    <p>View registered owners and their uploaded datasets.</p>
+
+    <div class="companies">
+        <div class="card">
+            <h3>Amazon</h3>
+            <div class="count">{{ company_counts["Amazon"] }}</div>
+            <p>Registered Owners</p>
+        </div>
+
+        <div class="card">
+            <h3>Flipkart</h3>
+            <div class="count">{{ company_counts["Flipkart"] }}</div>
+            <p>Registered Owners</p>
+        </div>
+
+        <div class="card">
+            <h3>Myntra</h3>
+            <div class="count">{{ company_counts["Myntra"] }}</div>
+            <p>Registered Owners</p>
+        </div>
+
+        <div class="card">
+            <h3>Meesho</h3>
+            <div class="count">{{ company_counts["Meesho"] }}</div>
+            <p>Registered Owners</p>
+        </div>
+    </div>
+
+    <h2>Owner Dataset Details</h2>
+
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>Sl. No.</th>
+                    <th>Owner Name</th>
+                    <th>Company</th>
+                    <th>Uploaded File</th>
+                    <th>Dataset</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for owner in owners %}
+                <tr>
+                    <td>{{ loop.index }}</td>
+                    <td>{{ owner.get("owner_name", owner.get("name", "Unknown")) }}</td>
+                    <td>{{ owner.get("company", "Unknown") }}</td>
+                    <td>
+                        {% if owner.get("uploaded_filename") %}
+                            {{ owner.get("uploaded_filename") }}
+                        {% else %}
+                            No file uploaded
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if owner.get("has_dataset") %}
+                            <a href="{{ url_for('admin_view_owner',owner_email=owner.get('email', '')) }}">
+                            View CSV
+                            </a>
+                        {% else %}
+                            Not available
+                        {% endif %}
+                    </td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="5">No owners registered yet.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        
+        </table>
+    </div>
+
+</body>
+</html>

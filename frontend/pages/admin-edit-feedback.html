@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Owner Feedback | Smart Buy</title>
+
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #F3E8FF, #FFF0E0);
+            color: #3B245E;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 25px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 4px 12px #00000015;
+        }
+
+        h1 {
+            color: #6D28D9;
+            text-align: center;
+        }
+
+        label {
+            display: block;
+            margin-top: 18px;
+            font-weight: bold;
+        }
+
+        input, textarea, select {
+            width: 100%;
+            box-sizing: border-box;
+            padding: 12px;
+            margin-top: 8px;
+            border: 1px solid #C4B5FD;
+            border-radius: 8px;
+            font-size: 15px;
+        }
+
+        textarea {
+            min-height: 130px;
+            resize: vertical;
+        }
+
+        button, .cancel {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 12px 18px;
+            border: none;
+            border-radius: 8px;
+            color: white;
+            text-decoration: none;
+            cursor: pointer;
+            font-size: 15px;
+        }
+
+        button {
+            background: #7C3AED;
+        }
+
+        .cancel {
+            background: #F97316;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Edit Owner Feedback</h1>
+
+        <p><strong>Owner:</strong> {{ feedback.get('owner_name', '') }}</p>
+        <p><strong>Company:</strong> {{ feedback.get('company', '') }}</p>
+
+        <form method="POST">
+            <label for="rating">Rating</label>
+            <select id="rating" name="rating" required>
+                <option value="1" {% if feedback.get('rating') == '1' %}selected{% endif %}>1 - Poor</option>
+                <option value="2" {% if feedback.get('rating') == '2' %}selected{% endif %}>2 - Fair</option>
+                <option value="3" {% if feedback.get('rating') == '3' %}selected{% endif %}>3 - Good</option>
+                <option value="4" {% if feedback.get('rating') == '4' %}selected{% endif %}>4 - Very Good</option>
+                <option value="5" {% if feedback.get('rating') == '5' %}selected{% endif %}>5 - Excellent</option>
+            </select>
+
+            <label for="feedback">Feedback Message</label>
+            <textarea id="feedback" name="feedback" maxlength="1000" required>{{ feedback.get('feedback', '') }}</textarea>
+
+            <button type="submit">Save Changes</button>
+            <a href="/admin-feedback" class="cancel">Cancel</a>
+        </form>
+    </div>
+</body>
+</html>

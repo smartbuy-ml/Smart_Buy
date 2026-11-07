@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Buy - Logout</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #F3E8FF, #FFF0E0);
+            color: #3B245E;
+        }
+
+        .logout-box {
+            width: 90%;
+            max-width: 420px;
+            padding: 35px;
+            text-align: center;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px #7C3AED25;
+        }
+
+        h1 {
+            color: #7C3AED;
+        }
+
+        p {
+            color: #6B5A7D;
+            line-height: 1.7;
+        }
+
+        .btn {
+            display: block;
+            margin-top: 15px;
+            padding: 13px;
+            border-radius: 8px;
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .save {
+            background: linear-gradient(90deg, #7C3AED, #F97316);
+        }
+
+        .cancel {
+            background: #EDE9FE;
+            color: #5B21B6;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="logout-box">
+        <h1>Before You Logout</h1>
+
+        <p>Do you want to save your work before logging out?</p>
+
+        <a href="/save-logout" class="btn save">
+            Save & Logout
+        </a>
+
+        <a href="/owner-dashboard" class="btn cancel">
+            Cancel
+        </a>
+    </div>
+</body>
+</html>

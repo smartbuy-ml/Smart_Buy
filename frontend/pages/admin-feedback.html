@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Owner Feedback | Smart Buy</title>
+
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #F3E8FF, #FFF0E0);
+            color: #3B245E;
+        }
+
+        nav {
+            background: #7C3AED;
+            padding: 18px;
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 35px auto;
+            padding: 20px;
+        }
+
+        .card {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 12px #00000015;
+            overflow-x: auto;
+        }
+
+        h1, h2 {
+            color: #6D28D9;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+
+        th, td {
+            padding: 12px;
+            border: 1px solid #C4B5FD;
+            text-align: left;
+        }
+
+        th {
+            background: #7C3AED;
+            color: white;
+        }
+
+        .empty {
+            color: #777;
+        }
+
+        .back {
+            display: inline-block;
+            margin-bottom: 15px;
+            background: #F97316;
+            color: white;
+            padding: 10px 16px;
+            border-radius: 8px;
+            position: absolute;
+            text-decoration:none;
+            top: 40px;
+            right: 40px;
+        }
+    </style>
+</head>
+
+<body></body>
+
+<div class="container">
+
+    <h1>Owner Feedback</h1>
+    <p>View feedback submitted by registered owners.</p>
+
+    <div class="card">
+        <h2>All Feedback</h2>
+
+        {% if feedback_list %}
+<table>
+    <tr>
+        <th>Owner Name</th>
+        <th>Company</th>
+        <th>Rating</th>
+        <th>Feedback</th>
+        <th>Date and Time</th>
+        <th>Actions</th>
+    </tr>
+
+    {% for item in feedback_list %}
+    <tr>
+        <td>{{ item.get('owner_name', '') }}</td>
+        <td>{{ item.get('company', '') }}</td>
+        <td>{{ item.get('rating', '') }}/5</td>
+        <td>{{ item.get('feedback', '') }}</td>
+        <td>{{ item.get('date', 'Not recorded') }}</td>
+
+        <td>
+            <a href="{{ url_for('admin_edit_feedback', feedback_id=loop.index0) }}">
+                Edit
+            </a>
+
+            <form method="POST"
+                  action="{{ url_for('admin_delete_feedback', feedback_id=loop.index0) }}"
+                  onsubmit="return confirm('Are you sure you want to delete this feedback?');">
+
+                <button type="submit"
+                        style="background:#F97316; color:white;">
+                    Delete
+                </button>
+            </form>
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+
+{% else %}
+<p class="empty">No feedback has been submitted yet.</p>
+{% endif %}
+
+       
+    </div>
+
+    <a class="back" href="/admin-dashboard">
+        Back to Dashboard
+    </a>
+
+</div>
+
+</body>
+</html>
