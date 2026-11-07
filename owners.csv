@@ -1,0 +1,2 @@
+owner_name,company,email,password_hash,registration_time
+owner,Amazon,owner@gmail.com,scrypt:32768:8:1$WipGYoON4THIrTLd$e8a7d3dce4ed9f8044b5f5888aea85a4157989a0a6ad6e5843c85b31d1725af9d431ec2f257779b7d9c7c414ee6b855b5b00149d18b1b631a52b94e63d487dff,2026-11-06 01:54:23

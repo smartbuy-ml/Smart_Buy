@@ -1,0 +1,7 @@
+Flask
+pandas
+numpy
+scikit-learn
+Werkzeug
+gunicorn
+matplotlib==3.11.2
