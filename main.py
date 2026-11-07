@@ -691,6 +691,16 @@ def owner_dashboard():
             None
         )
 
+        # Support different Purchase Status column names
+        df = df.rename(columns={
+            "purchasestatus": "purchase_status",
+            "status": "purchase_status",
+            "purchase_result": "purchase_status",
+            "buy_status": "purchase_status",
+            "buying_status": "purchase_status",
+            "customer_purchase_status": "purchase_status"
+        })
+
         if purchase_column:
             status = (
                 df[purchase_column]
@@ -734,8 +744,10 @@ def owner_dashboard():
             gender = gender.replace({
                 "m": "Male",
                 "male": "Male",
+                "0": "Male",
                 "f": "Female",
-                "female": "Female"
+                "female": "Female",
+                "1": "Female"
             })
 
             # Normalize gender values
@@ -767,6 +779,14 @@ def owner_dashboard():
         # -------------------------
         # CATEGORY SUMMARY
         # -------------------------
+        #normalize column nmaes
+        df.columns= (
+            df.columns.astype(str)
+            .str.strip()
+            .str.lower()
+            .str.replace(" ","_")
+        )
+        
         category_column = next(
             (
                 c for c in [
