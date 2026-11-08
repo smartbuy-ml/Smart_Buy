@@ -1306,7 +1306,6 @@ def admin_login():
         )
 
     return render_template("admin-login.html")
-return render_template("admin_register.html")
 
 
 # Temporary OTP storage
