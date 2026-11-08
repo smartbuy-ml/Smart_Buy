@@ -739,6 +739,7 @@ def owner_dashboard():
                 .astype(str)
                 .str.strip()
                 .str.lower()
+                .str.upper()
             )
 
             gender = gender.replace({
@@ -751,7 +752,7 @@ def owner_dashboard():
             })
 
             # Normalize gender values
-            gender = gender.astype(str).str.strip().str.lower()
+            gender = gender.astype(str).str.strip().str.lower().str.upper()
 
             gender = gender.replace({
                 "m": "Male",
@@ -784,6 +785,7 @@ def owner_dashboard():
             df.columns.astype(str)
             .str.strip()
             .str.lower()
+            .str.upper()
             .str.replace(" ","_")
         )
         
@@ -1304,7 +1306,7 @@ def admin_login():
         )
 
     return render_template("admin-login.html")
-
+return render_template("admin_register.html")
 
 
 # Temporary OTP storage
